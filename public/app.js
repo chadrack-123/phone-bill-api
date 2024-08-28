@@ -10,7 +10,7 @@ function phoneBillApp() {
 
         // Fetch all price plans
         fetchPricePlans() {
-            fetch('/api/price_plans/')
+            fetch('https://phone-bill-api-idtm.onrender.com/api/price_plans/')
                 .then(res => res.json())
                 .then(data => {
                     this.pricePlans = data;

@@ -5,8 +5,16 @@ import sqlite3 from 'sqlite3';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
+const cors = require("cors");
+
+
+
 const app = express();
 const PORT = process.env.PORT || 4011;
+
+app.use(cors()); // Enable CORS for all origins
+
+app.use(express.json()); // Parse JSON bodies
 
 // Get the directory name of the current module
 const __filename = fileURLToPath(import.meta.url);

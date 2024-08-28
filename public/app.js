@@ -14,7 +14,7 @@ function phoneBillApp() {
                 .then(res => res.json())
                 .then(data => {
                     this.pricePlans = data;
-                });
+                }).catch(error => console.error('Error fetching price plans:', error));
         },
 
         // Create a new price plan

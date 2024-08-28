@@ -5,14 +5,14 @@ import sqlite3 from 'sqlite3';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
-//import cors from "cors";
+import cors from "cors";
 
 
 
 const app = express();
 const PORT = process.env.PORT || 4011;
 
-//app.use(cors()); // Enable CORS for all origins
+app.use(cors()); // Enable CORS for all origins
 app.use(express.static('public'));
 app.use(express.json()); // Parse JSON bodies
 
@@ -39,6 +39,7 @@ app.use(express.json());
 app.get('/api/price_plans', async (req, res) => {
     const pricePlans = await db.all('SELECT * FROM price_plan');
     res.json(pricePlans);
+    console.log(res)
 });
 
 

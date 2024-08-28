@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phone Bill Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="//unpkg.com/alpinejs" defer></script>
+</head>
+<body class="bg-gray-100 text-gray-900 font-sans antialiased p-6" x-data="phoneBillApp()">
+    <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-8">
+        <h1 class="text-3xl font-bold text-center text-indigo-600 mb-8">Phone Bill Calculator</h1>
+
+        <!-- Form to create a new price plan -->
+        <div class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Create Price Plan</h2>
+            <form @submit.prevent="createPricePlan()" class="space-y-4">
+                <div>
+                    <label for="planName" class="block text-sm font-medium text-gray-700">Price Plan Name:</label>
+                    <input type="text" id="planName" x-model="newPlan.name" required
+                           class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-4 py-2 text-gray-900" placeholder="Enter plan name">
+                </div>
+                <div>
+                    <label for="callCost" class="block text-sm font-medium text-gray-700">Call Cost:</label>
+                    <input type="number" id="callCost" x-model="newPlan.call_cost" required
+                           class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-4 py-2 text-gray-900" placeholder="Enter call cost">
+                </div>
+                <div>
+                    <label for="smsCost" class="block text-sm font-medium text-gray-700">SMS Cost:</label>
+                    <input type="number" id="smsCost" x-model="newPlan.sms_cost" required
+                           class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-4 py-2 text-gray-900" placeholder="Enter SMS cost">
+                </div>
+                <button type="submit"
+                        class="w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-300">
+                    Create Price Plan
+                </button>
+            </form>
+            <p class="mt-4 text-green-600" x-text="createStatus"></p>
+        </div>
+
+        <!-- List all price plans -->
+        <div class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Available Price Plans</h2>
+            <button @click="fetchPricePlans()"
+                    class="mb-4 bg-indigo-600 text-white font-bold py-2 px-4 rounded hover:bg-indigo-700 transition duration-300">
+                Fetch Price Plans
+            </button>
+            <ul class="space-y-2">
+                <template x-for="plan in pricePlans" :key="plan.id">
+                    <li class="bg-gray-100 p-4 rounded shadow">
+                        <span class="font-semibold text-gray-700" x-text="plan.plan_name"></span> - 
+                        Call Cost: <span class="text-indigo-600 font-bold" x-text="plan.call_price"></span>, 
+                        SMS Cost: <span class="text-indigo-600 font-bold" x-text="plan.sms_price"></span>
+                    </li>
+                </template>
+            </ul>
+        </div>
+
+        <!-- Calculate Phone Bill -->
+        <div>
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Calculate Phone Bill</h2>
+            <form @submit.prevent="calculatePhoneBill()" class="space-y-4">
+                <div>
+                    <label for="selectedPlan" class="block text-sm font-medium text-gray-700">Select Plan:</label>
+                    <select id="selectedPlan" x-model="selectedPlan"
+                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-4 py-2 text-gray-900 bg-white hover:border-indigo-600 transition ease-in-out duration-300">
+                        <template x-for="plan in pricePlans" :key="plan.id">
+                            <option :value="plan.plan_name" x-text="plan.plan_name"></option>
+                        </template>
+                    </select>
+                </div>
+                <div>
+                    <label for="actions" class="block text-sm font-medium text-gray-700">Actions (comma-separated e.g., "call, sms, call"):</label>
+                    <input type="text" id="actions" x-model="actions" required
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                </div>
+                <button type="submit"
+                        class="w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded hover:bg-indigo-700 transition duration-300">
+                    Calculate Bill
+                </button>
+            </form>
+            <p class="mt-4 text-xl font-semibold text-gray-800">Total: <span class="text-indigo-600" x-text="totalBill"></span></p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

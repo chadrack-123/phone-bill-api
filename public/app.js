@@ -7,11 +7,11 @@ function phoneBillApp() {
         selectedPlan: '',
         actions: '',
         totalBill: 0,
-        url :'https://phone-bill-api-idtm.onrender.com',
+        url: 'https://phone-bill-api-idtm.onrender.com',
 
         // Fetch all price plans
         fetchPricePlans() {
-            fetch(`${url}/api/price_plans/`)
+            fetch(`${this.url}/api/price_plans/`)
                 .then(res => res.json())
                 .then(data => {
                     this.pricePlans = data;
@@ -20,7 +20,11 @@ function phoneBillApp() {
 
         // Create a new price plan
         createPricePlan() {
-            fetch(`${url}/api/price_plan/create`, {
+            if (!this.newPlan.name || !this.newPlan.call_cost || !this.newPlan.sms_cost) {
+                console.error('All fields are required.');
+                return;
+            }
+            fetch(`${this.url}/api/price_plan/create`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(this.newPlan)
@@ -30,7 +34,8 @@ function phoneBillApp() {
                 this.createStatus = data;
                 this.newPlan = { name: '', call_cost: '', sms_cost: '' }; // Clear the form
                 this.fetchPricePlans(); // Refresh the list of price plans
-            });
+            })
+            .catch(error => console.error('Error creating price plan:', error));
         },
 
         // Calculate phone bill
@@ -39,7 +44,7 @@ function phoneBillApp() {
                 price_plan: this.selectedPlan,
                 actions: this.actions
             };
-            fetch(`${url}/api/phonebill`, {
+            fetch(`${this.url}/api/phonebill`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(billData)
@@ -47,7 +52,8 @@ function phoneBillApp() {
             .then(res => res.json())
             .then(data => {
                 this.totalBill = data.total;
-            });
+            })
+            .catch(error => console.error('Error calculating phone bill:', error));
         }
     };
 }

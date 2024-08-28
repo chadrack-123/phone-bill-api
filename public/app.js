@@ -7,7 +7,7 @@ function phoneBillApp() {
         selectedPlan: '',
         actions: '',
         totalBill: 0,
-        url: 'https://phone-bill-api-idtm.onrender.com',
+        url: 'https://phone-bill-api-idtm.onrender.com',  // Ensure the URL is defined as a property
 
         // Fetch all price plans
         fetchPricePlans() {
@@ -15,7 +15,8 @@ function phoneBillApp() {
                 .then(res => res.json())
                 .then(data => {
                     this.pricePlans = data;
-                }).catch(error => console.error('Error fetching price plans:', error));
+                })
+                .catch(error => console.error('Error fetching price plans:', error));
         },
 
         // Create a new price plan

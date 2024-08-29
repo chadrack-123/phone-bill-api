@@ -39,7 +39,7 @@ app.use(express.json());
 app.get('/api/price_plans', async (req, res) => {
     const pricePlans = await db.all('SELECT * FROM price_plan');
     res.json(pricePlans);
-    console.log(res)
+    
 });
 
 
